@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Zonas{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi bi-geo-alt me-2" style="color: var(--cyan-400);"></i>Zonas de distribución
+    </h1>
+    <a href="{{ url_for('admin_zone_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Nueva zona
+    </a>
+</div>
+
+{% if zones %}
+<div class="card table-card animate-in animate-in-1">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Responsable</th>
+                        <th>Correo responsable</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for z in zones %}
+                    <tr>
+                        <td>
+                            <i class="bi bi-pin-map me-1" style="color: var(--teal-400);"></i>
+                            <strong>{{ z.name }}</strong>
+                        </td>
+                        <td>
+                            <i class="bi bi-person me-1" style="color: var(--blue-300);"></i>
+                            {{ z.manager_name }}
+                        </td>
+                        <td>{{ z.manager_email }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('admin_zone_edit', zone_id=z.id) }}"
+                                class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </a>
+                            <form method="post" action="{{ url_for('admin_zone_delete', zone_id=z.id) }}"
+                                class="d-inline" onsubmit="return confirm('¿Seguro que deseas eliminar esta zona?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card animate-in">
+    <div class="empty-state">
+        <i class="bi bi-geo-alt"></i>
+        <p>No hay zonas registradas.</p>
+        <a href="{{ url_for('admin_zone_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>Crear primera zona
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

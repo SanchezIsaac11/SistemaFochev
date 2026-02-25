@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Distribuidores{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi bi-people me-2" style="color: var(--cyan-400);"></i>Distribuidores
+    </h1>
+    <a href="{{ url_for('admin_distributor_new') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus me-1"></i>Nuevo distribuidor
+    </a>
+</div>
+
+{% if distributors %}
+<div class="card table-card animate-in animate-in-1">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Zona</th>
+                        <th>Activo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in distributors %}
+                    <tr>
+                        <td>
+                            <i class="bi bi-person-circle me-1" style="color: var(--blue-300);"></i>
+                            <strong>{{ d.first_name }} {{ d.last_name }}</strong>
+                        </td>
+                        <td>{{ d.email }}</td>
+                        <td>{{ d.phone or '-' }}</td>
+                        <td>
+                            {% if d.zone %}
+                            <i class="bi bi-geo-alt me-1" style="color: var(--teal-400);"></i>{{ d.zone.name }}
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if d.active %}
+                            <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Sí</span>
+                            {% else %}
+                            <span class="badge bg-secondary"><i class="bi bi-x-lg me-1"></i>No</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{{ url_for('admin_distributor_edit', dist_id=d.id) }}"
+                                class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </a>
+                            <form method="post" action="{{ url_for('admin_distributor_delete', dist_id=d.id) }}"
+                                class="d-inline"
+                                onsubmit="return confirm('¿Seguro que deseas eliminar este distribuidor?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card animate-in">
+    <div class="empty-state">
+        <i class="bi bi-people"></i>
+        <p>No hay distribuidores registrados.</p>
+        <a href="{{ url_for('admin_distributor_new') }}" class="btn btn-primary">
+            <i class="bi bi-person-plus me-1"></i>Agregar distribuidor
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

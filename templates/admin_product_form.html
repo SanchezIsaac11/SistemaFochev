@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% if product %}
+{% set page_title = "Editar producto" %}
+{% set page_icon = "bi-pencil-square" %}
+{% else %}
+{% set page_title = "Nuevo producto" %}
+{% set page_icon = "bi-plus-circle" %}
+{% endif %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi {{ page_icon }} me-2" style="color: var(--cyan-400);"></i>{{ page_title }}
+    </h1>
+</div>
+
+<div class="card animate-in animate-in-1" style="max-width: 750px;">
+    <div class="card-body">
+        <div class="accent-line"></div>
+        <form method="post" class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Nombre</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-box-seam input-icon"></i>
+                    <input type="text" class="form-control" id="name" name="name"
+                        value="{{ product.name if product else '' }}" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="price" class="form-label">Precio</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-currency-dollar input-icon"></i>
+                    <input type="number" class="form-control" id="price" name="price" min="0" step="0.01"
+                        value="{{ product.price if product else '' }}" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="stock" class="form-label">Stock</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-archive input-icon"></i>
+                    <input type="number" class="form-control" id="stock" name="stock" min="0"
+                        value="{{ product.stock if product else 0 }}" required>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea class="form-control" id="description" name="description"
+                    rows="3">{{ product.description if product else '' }}</textarea>
+            </div>
+            <div class="col-md-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="active" name="active" {% if not product or
+                        product.active %}checked{% endif %}>
+                    <label class="form-check-label" for="active">
+                        Producto activo
+                    </label>
+                </div>
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i>Guardar
+                </button>
+                <a href="{{ url_for('admin_products') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg me-1"></i>Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

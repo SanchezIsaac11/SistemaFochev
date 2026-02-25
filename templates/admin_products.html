@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi bi-box-seam me-2" style="color: var(--cyan-400);"></i>Productos
+    </h1>
+    <a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Nuevo producto
+    </a>
+</div>
+
+{% if products %}
+<div class="card table-card animate-in animate-in-1">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Activo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <i class="bi bi-box-seam me-1" style="color: var(--blue-300);"></i>
+                            <strong>{{ product.name }}</strong>
+                        </td>
+                        <td>$ {{ "%.2f"|format(product.price) }}</td>
+                        <td>
+                            {% if product.stock <= 5 %} <span class="badge bg-warning">{{ product.stock }}</span>
+                                {% else %}
+                                <span class="badge bg-success">{{ product.stock }}</span>
+                                {% endif %}
+                        </td>
+                        <td>
+                            {% if product.active %}
+                            <span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>Sí</span>
+                            {% else %}
+                            <span class="badge bg-secondary"><i class="bi bi-x-lg me-1"></i>No</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{{ url_for('admin_product_edit', product_id=product.id) }}"
+                                class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </a>
+                            <form method="post" action="{{ url_for('admin_product_delete', product_id=product.id) }}"
+                                class="d-inline"
+                                onsubmit="return confirm('¿Seguro que deseas eliminar este producto?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card animate-in">
+    <div class="empty-state">
+        <i class="bi bi-box-seam"></i>
+        <p>No hay productos registrados.</p>
+        <a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>Crear primer producto
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

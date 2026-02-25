@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Ventas{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi bi-graph-up-arrow me-2" style="color: var(--cyan-400);"></i>Ventas y pedidos
+    </h1>
+</div>
+
+{% if orders %}
+<div class="card table-card animate-in animate-in-1">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Zona</th>
+                        <th>Distribuidor</th>
+                        <th>Estatus</th>
+                        <th>Total</th>
+                        <th>Excel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td><strong>#{{ order.id }}</strong></td>
+                        <td>{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                        <td>
+                            <i class="bi bi-person me-1" style="color: var(--blue-300);"></i>
+                            {{ order.customer.first_name }} {{ order.customer.last_name }}
+                        </td>
+                        <td>
+                            {% if order.zone %}
+                            <i class="bi bi-geo-alt me-1" style="color: var(--teal-400);"></i>{{ order.zone.name }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order.distributor %}
+                            <i class="bi bi-truck me-1" style="color: var(--blue-300);"></i>
+                            {{ order.distributor.first_name }} {{ order.distributor.last_name }}
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge status-{{ order.status }} text-capitalize">{{ order.status }}</span>
+                        </td>
+                        <td><strong>$ {{ "%.2f"|format(order.total) }}</strong></td>
+                        <td>
+                            {% if order.excel_path %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-file-earmark-excel me-1"></i>Generado
+                            </span>
+                            {% else %}
+                            <span class="badge bg-secondary">N/A</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card animate-in">
+    <div class="empty-state">
+        <i class="bi bi-graph-up"></i>
+        <p>No hay ventas registradas aún.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

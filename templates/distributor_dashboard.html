@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Pedidos pendientes{% endblock %}
+{% block content %}
+<div class="greeting-section mb-3 animate-in">
+    <h1 class="h4 mb-1">
+        <i class="bi bi-truck me-2" style="color: var(--cyan-400);"></i>Pedidos de tu zona
+    </h1>
+    <p class="text-muted">
+        Zona asignada: <strong><i class="bi bi-geo-alt me-1"></i>{{ user.zone.name if user.zone else 'Sin zona asignada'
+            }}</strong>
+    </p>
+</div>
+
+{% if pending_orders %}
+<div class="card table-card animate-in animate-in-1">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Estatus</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in pending_orders %}
+                    <tr>
+                        <td><strong>#{{ order.id }}</strong></td>
+                        <td>{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                        <td>
+                            <i class="bi bi-person me-1" style="color: var(--blue-300);"></i>
+                            {{ order.customer.first_name }} {{ order.customer.last_name }}
+                        </td>
+                        <td>
+                            <span class="badge status-{{ order.status }} text-capitalize">{{ order.status }}</span>
+                        </td>
+                        <td><strong>$ {{ "%.2f"|format(order.total) }}</strong></td>
+                        <td class="text-end">
+                            <a href="{{ url_for('distributor_order_detail', order_id=order.id) }}"
+                                class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye me-1"></i>Ver detalles
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card animate-in">
+    <div class="empty-state">
+        <i class="bi bi-check-circle"></i>
+        <p>No tienes pedidos pendientes en este momento. ¡Todo al día!</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

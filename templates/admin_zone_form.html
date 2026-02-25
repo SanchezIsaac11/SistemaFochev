@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% if zone %}
+{% set page_title = "Editar zona" %}
+{% set page_icon = "bi-pencil-square" %}
+{% else %}
+{% set page_title = "Nueva zona" %}
+{% set page_icon = "bi-plus-circle" %}
+{% endif %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi {{ page_icon }} me-2" style="color: var(--cyan-400);"></i>{{ page_title }}
+    </h1>
+</div>
+
+<div class="card animate-in animate-in-1" style="max-width: 750px;">
+    <div class="card-body">
+        <div class="accent-line"></div>
+        <form method="post" class="row g-3">
+            <div class="col-md-4">
+                <label for="name" class="form-label">Nombre de la zona</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-geo-alt input-icon"></i>
+                    <input type="text" class="form-control" id="name" name="name"
+                        value="{{ zone.name if zone else '' }}" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="manager_name" class="form-label">Nombre del responsable</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-person input-icon"></i>
+                    <input type="text" class="form-control" id="manager_name" name="manager_name"
+                        value="{{ zone.manager_name if zone else '' }}" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="manager_email" class="form-label">Correo del responsable</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input type="email" class="form-control" id="manager_email" name="manager_email"
+                        value="{{ zone.manager_email if zone else '' }}" required>
+                </div>
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i>Guardar
+                </button>
+                <a href="{{ url_for('admin_zones') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg me-1"></i>Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

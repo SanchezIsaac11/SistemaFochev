@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Mis pedidos{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi bi-receipt me-2" style="color: var(--cyan-400);"></i>Mis pedidos
+    </h1>
+</div>
+
+{% if orders %}
+<div class="card table-card animate-in animate-in-1">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Estatus</th>
+                        <th>Total</th>
+                        <th>Zona / Distribuidor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td><strong>#{{ order.id }}</strong></td>
+                        <td>{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                        <td>
+                            <span class="badge status-{{ order.status }} text-capitalize">{{ order.status }}</span>
+                        </td>
+                        <td><strong>$ {{ "%.2f"|format(order.total) }}</strong></td>
+                        <td>
+                            {% if order.zone %}
+                            <i class="bi bi-geo-alt me-1" style="color: var(--blue-300);"></i>{{ order.zone.name }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            {% if order.distributor %}
+                            <br><small class="text-muted">
+                                <i class="bi bi-person me-1"></i>{{ order.distributor.first_name }} {{
+                                order.distributor.last_name }}
+                            </small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card animate-in">
+    <div class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <p>Aún no tienes pedidos registrados.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

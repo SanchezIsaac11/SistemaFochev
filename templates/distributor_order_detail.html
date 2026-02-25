@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Detalle de pedido{% endblock %}
+{% block content %}
+<div class="page-header animate-in">
+    <h1 class="h4">
+        <i class="bi bi-receipt-cutoff me-2" style="color: var(--cyan-400);"></i>Pedido #{{ order.id }}
+    </h1>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        <div class="card detail-card animate-in animate-in-1">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-person-circle" style="color: var(--blue-300);"></i>
+                    Datos del cliente
+                </h5>
+                <div class="accent-line"></div>
+                <div class="detail-label">Nombre</div>
+                <div class="detail-value">{{ order.customer.first_name }} {{ order.customer.last_name }}</div>
+                <div class="detail-label">Correo</div>
+                <div class="detail-value">{{ order.customer.email }}</div>
+                <div class="detail-label">Teléfono</div>
+                <div class="detail-value">{{ order.customer.phone or '-' }}</div>
+                <div class="detail-label">Dirección</div>
+                <div class="detail-value">
+                    {{ order.customer.address or '-' }},
+                    {{ order.customer.city or '-' }},
+                    {{ order.customer.state or '-' }},
+                    C.P. {{ order.customer.postal_code or '-' }}
+                </div>
+                <div class="detail-label">Zona</div>
+                <div class="detail-value">
+                    <i class="bi bi-geo-alt me-1" style="color: var(--cyan-400);"></i>
+                    {{ order.zone.name if order.zone else '-' }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card detail-card animate-in animate-in-2">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-clipboard-data" style="color: var(--blue-300);"></i>
+                    Resumen del pedido
+                </h5>
+                <div class="accent-line"></div>
+                <div class="detail-label">Fecha</div>
+                <div class="detail-value">{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+                <div class="detail-label">Estatus actual</div>
+                <div class="detail-value">
+                    <span class="badge status-{{ order.status }} text-capitalize">{{ order.status }}</span>
+                </div>
+                <div class="detail-label">Total</div>
+                <div class="detail-value cart-total">$ {{ "%.2f"|format(order.total) }}</div>
+                <div class="detail-label">Asignado a</div>
+                <div class="detail-value">
+                    {% if order.distributor %}
+                    <i class="bi bi-person-check me-1" style="color: var(--teal-400);"></i>
+                    {{ order.distributor.first_name }} {{ order.distributor.last_name }}
+                    {% else %}
+                    <span class="text-muted">Sin asignar</span>
+                    {% endif %}
+                </div>
+                {% if order.excel_path %}
+                <div class="detail-label">Archivo Excel</div>
+                <div class="detail-value small text-muted">
+                    <i class="bi bi-file-earmark-excel me-1" style="color: #10b981;"></i>
+                    <code>{{ order.excel_path }}</code>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card table-card mb-3 animate-in animate-in-3">
+    <div class="card-header-custom">
+        <h5><i class="bi bi-box-seam me-1" style="color: var(--blue-300);"></i>Productos</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-end">Precio unitario</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items %}
+                    <tr>
+                        <td><strong>{{ item.product.name }}</strong></td>
+                        <td class="text-center">
+                            <span class="badge bg-secondary">{{ item.quantity }}</span>
+                        </td>
+                        <td class="text-end">$ {{ "%.2f"|format(item.unit_price) }}</td>
+                        <td class="text-end"><strong>$ {{ "%.2f"|format(item.subtotal) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card animate-in animate-in-4">
+    <div class="card-body">
+        <h5 class="card-title">
+            <i class="bi bi-arrow-repeat" style="color: var(--cyan-400);"></i>
+            Actualizar estatus
+        </h5>
+        <form method="post" class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label for="status" class="col-form-label" style="color: var(--text-secondary);">Nuevo estatus:</label>
+            </div>
+            <div class="col-auto">
+                <select name="status" id="status" class="form-select">
+                    {% for st in ['pendiente', 'asignado', 'en_ruta', 'entregado', 'cancelado'] %}
+                    <option value="{{ st }}" {% if order.status==st %}selected{% endif %}>
+                        {{ st|replace('_', ' ')|capitalize }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i>Guardar
+                </button>
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('distributor_dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Volver
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

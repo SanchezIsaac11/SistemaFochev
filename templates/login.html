@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Acceso{% endblock %}
+{% block content %}
+<div class="login-wrapper">
+    <!-- Floating background shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="login-card">
+        <div class="login-logo">
+            <i class="bi bi-gem"></i><br>
+            Fochev
+        </div>
+        <p class="login-subtitle">
+            Inicia sesión para acceder como cliente, distribuidor o administrador.
+        </p>
+        <form method="post" novalidate>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input type="email" class="form-control" id="email" name="email" required
+                        placeholder="tu.correo@fochev.com">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-icon-group">
+                    <i class="bi bi-lock input-icon"></i>
+                    <input type="password" class="form-control" id="password" name="password" required
+                        placeholder="••••••••">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+            </button>
+        </form>
+        <hr class="login-divider">
+        <div class="login-demo">
+            <strong><i class="bi bi-info-circle me-1"></i>Cuentas de prueba:</strong><br>
+            <span class="d-block mt-1">
+                <i class="bi bi-shield-check me-1"></i>Admin: <code>admin@fochev.com</code> / <code>admin123</code>
+            </span>
+            <span class="d-block mt-1">
+                <i class="bi bi-truck me-1"></i>Dist. Centro: <code>dist.centro@fochev.com</code> / <code>dist123</code>
+            </span>
+            <span class="d-block mt-1">
+                <i class="bi bi-truck me-1"></i>Dist. Norte: <code>dist.norte@fochev.com</code> / <code>dist123</code>
+            </span>
+            <span class="d-block mt-1">
+                <i class="bi bi-person me-1"></i>Cliente: <code>cliente.demo@fochev.com</code> / <code>cliente123</code>
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}
